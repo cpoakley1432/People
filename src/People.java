@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -14,30 +15,38 @@ public class People {
 
         HashMap<String, ArrayList<Person>> peopleInfo = new HashMap();
         String personContent = readFile("people.csv");
-        String [] lines = personContent.split("\n");
+        String[] lines = personContent.split("\n");
         ArrayList<Person> persons = new ArrayList();
 
-        for (String line : lines){
-            String [] columns = line.split(",");
-            String idStr = columns [0];
-            int id = Integer.valueOf(idStr);
-            String firstname =columns[1];
-            String lastname = columns [2];
-            String email = columns [3];
-            String country = columns [4];
-            String ipaddress = columns [5];
-            Person person = new Person(id, firstname, lastname, email , country , ipaddress);
+        int i = 0;
 
-            String countryName = String.valueOf(columns [4]);
-            ArrayList<Person> list = peopleInfo.get(countryName);
+        for (String line : lines) {
+            if (i!= 0){
+                String[] columns = line.split(",");
+                String idStr = columns[0];
+                int id = Integer.valueOf(idStr);
+                String firstname = columns[1];
+                String lastname = columns[2];
+                String email = columns[3];
+                String country = columns[4];
+                String ipaddress = columns[5];
+                Person person = new Person(id, firstname, lastname, email, country, ipaddress);
 
-            if (list == null){
-                list = new ArrayList();
-                list.add(person);
-                peopleInfo.put(countryName, list);
-            }else {
-                list.add(person);
+                String countryName = String.valueOf(columns[4]);
+                ArrayList<Person> list = peopleInfo.get(countryName);
+
+                if (list == null) {
+                    list = new ArrayList();
+                    list.add(person);
+                    peopleInfo.put(countryName, list);
+                } else {
+                    list.add(person);
+                }
+                Collections.sort(list);
+
             }
+            System.out.println(peopleInfo.toString());
+            i++;
         }
     }
 
